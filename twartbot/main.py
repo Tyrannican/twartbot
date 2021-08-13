@@ -12,6 +12,6 @@ if __name__ == "__main__":
     card = random.choice(cards)
 
     # Builds the text and makes the tweet
-    text = f"{card['name']} ({card['set_name']}):\n\n{card['flavour']}\n"
+    text = f"{card['name']} ({card['set_name']}):\n\n{card['flavour']}\n#mtg"
     img_path = download_artwork(card)
     api.make_image_tweet(img_path, text)
