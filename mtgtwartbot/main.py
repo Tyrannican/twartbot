@@ -15,5 +15,4 @@ if __name__ == "__main__":
     text = f"{card['name']} ({card['set_name']}):\n\n{card['flavour']}\n#MTG #MagicTheGathering"
     img_path = download_artwork(card)
 
-    print(text)
     api.make_image_tweet(img_path, text)

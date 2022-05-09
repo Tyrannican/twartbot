@@ -3,14 +3,13 @@ import time
 import json
 import requests
 from typing import List, Dict
-from bs4 import BeautifulSoup
 
 # Filepath handling
 LOCAL = os.path.dirname(os.path.abspath(__file__))
 SCRYFALL_FILE = os.path.join(LOCAL, "scryfall.json")
 
 # Bulk Data from Scryfall
-URL = "https://scryfall.com/docs/api/bulk-data"
+URL = 'https://api.scryfall.com/bulk-data'
 
 class NoScryfallDownloadLink(Exception):
     """No download link found on Scryfall Bulk Data page."""
@@ -60,13 +59,10 @@ def fetch_download_url() -> str:
             "Unable to access Scryfall main download page!"
         )
 
-    soup = BeautifulSoup(page.text, "lxml")
-    link = [
-        li.attrs["href"] for li in soup.findAll("a")
-        if "href" in li.attrs and "oracle-cards" in li.attrs["href"]
-    ]
-
-    return link[0] if link else None
+    return [
+        i for i in page.json()['data']
+        if i['type'] == 'oracle_cards'
+    ][0]['download_uri']
 
 def download() -> List[Dict]:
     """Downloads the latest bulk data from Scryfall and sanitises the data.
@@ -80,7 +76,7 @@ def download() -> List[Dict]:
     """
     download_link = fetch_download_url()
 
-    if download_link is None:
+    if download_link is None or download_link == '':
         raise ScryfallDownloadError("No download link available!")
 
     print("Fetching Scryfall card data...")
