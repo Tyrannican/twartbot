@@ -1,11 +1,11 @@
 import random
 from .twitter import TwitterAPI
-from .scryfall import get_scryfall_cards, download_artwork
+from .scryfall import download_cards, download_artwork
 
 if __name__ == "__main__":
     # Launch the API and get the cards
     api = TwitterAPI()
-    cards = get_scryfall_cards()
+    cards = download_cards()
 
     # Shuffles them up and picks one
     random.shuffle(cards)

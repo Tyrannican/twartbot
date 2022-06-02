@@ -1,12 +1,9 @@
 import os
-import time
-import json
 import requests
 from typing import List, Dict
 
 # Filepath handling
 LOCAL = os.path.dirname(os.path.abspath(__file__))
-SCRYFALL_FILE = os.path.join(LOCAL, "scryfall.json")
 
 # Bulk Data from Scryfall
 URL = 'https://api.scryfall.com/bulk-data'
@@ -20,30 +17,8 @@ class ScryfallDownloadError(Exception):
 class NoArtwork(Exception):
     """Card has no valid artwork"""
 
-def write_json_file(data: Dict):
-    """Writes dictionary to JSON file
-
-    Args:
-        data (Dict): Data to write to JSON
-    """
-
-    with open(SCRYFALL_FILE, "w") as fd:
-        json.dump(data, fd, indent=4)
-
-def read_json_file() -> Dict:
-    """Read a JSON file and return the data
-
-    Returns:
-        Dict: JSON data
-    """
-
-    with open(SCRYFALL_FILE) as fd:
-        return json.load(fd)
-
 def fetch_download_url() -> str:
-    """Fetches the download link from the Scryfall Bulk Data page using
-    Beautiful Soup to scrape the page.
-    So the file is always up to date
+    """Fetches the download link from the Scryfall Bulk Data page
 
     Raises:
         ScryfallDownloadError: Unable to access the Scryfall page.
@@ -64,7 +39,7 @@ def fetch_download_url() -> str:
         if i['type'] == 'oracle_cards'
     ][0]['download_uri']
 
-def download() -> List[Dict]:
+def download_cards() -> List[Dict]:
     """Downloads the latest bulk data from Scryfall and sanitises the data.
 
     Raises:
@@ -88,7 +63,6 @@ def download() -> List[Dict]:
 
     cards_json = r.json()
     cards = sanitise_cards(cards_json)
-    write_json_file(cards)
 
     return cards
 
@@ -166,27 +140,8 @@ def is_invalid(card: Dict) -> bool:
     
     return False
 
-def get_scryfall_cards() -> List[Dict]:
-    """Downloads the cards or laods them from disk.
-    Re-downloads the cards if a cetain tim has passed.
-
-    Returns:
-        List[Dict]: Card Data
-    """
-
-    if os.path.exists(SCRYFALL_FILE):
-        curr_time = time.time()
-        if curr_time > os.path.getmtime(SCRYFALL_FILE) + (12 * 60 * 60):
-            cards = download()
-        else:
-            cards = read_json_file()
-    else:
-        cards = download()
-
-    return cards
-
 def download_artwork(card: Dict) -> str:
-    """Downloads the artwork crop from Scryfall.
+    """Downloads the artwork crop from Scryfall and saves to disk.
 
     Args:
         card (Dict): Card information
