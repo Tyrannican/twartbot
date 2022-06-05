@@ -8,8 +8,10 @@ ACCESS = environ.get("ACCESS_KEY")
 ACCESS_SECRET = environ.get("ACCESS_SECRET")
 KEYS = [CONSUMER, CONSUMER_SECRET, ACCESS, ACCESS_SECRET]
 
+
 class APIKeysNotSet(Exception):
     """API Keys are not set as environment variables"""
+
 
 def _make_api() -> tweepy.API:
     """Makes the Tweepy API object
@@ -27,6 +29,7 @@ def _make_api() -> tweepy.API:
     auth = tweepy.OAuthHandler(CONSUMER, CONSUMER_SECRET)
     auth.set_access_token(ACCESS, ACCESS_SECRET)
     return tweepy.API(auth)
+
 
 class TwitterAPI:
     """Class to simplify access to the API

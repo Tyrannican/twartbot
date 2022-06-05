@@ -8,14 +8,18 @@ LOCAL = os.path.dirname(os.path.abspath(__file__))
 # Bulk Data from Scryfall
 URL = 'https://api.scryfall.com/bulk-data'
 
+
 class NoScryfallDownloadLink(Exception):
     """No download link found on Scryfall Bulk Data page."""
+
 
 class ScryfallDownloadError(Exception):
     """Unable to download file from Scryfall"""
 
+
 class NoArtwork(Exception):
     """Card has no valid artwork"""
+
 
 def fetch_download_url() -> str:
     """Fetches the download link from the Scryfall Bulk Data page
@@ -38,6 +42,7 @@ def fetch_download_url() -> str:
         i for i in page.json()['data']
         if i['type'] == 'oracle_cards'
     ][0]['download_uri']
+
 
 def download_cards() -> List[Dict]:
     """Downloads the latest bulk data from Scryfall and sanitises the data.
@@ -66,6 +71,7 @@ def download_cards() -> List[Dict]:
 
     return cards
 
+
 def sanitise_cards(cards: List[Dict]) -> List[Dict]:
     """Sanitises the data to trim down the unwanted information.
 
@@ -83,6 +89,7 @@ def sanitise_cards(cards: List[Dict]) -> List[Dict]:
             sanitised.append(card)
 
     return sanitised
+
 
 def sanitise_card(card: Dict) -> Dict:
     """Sanitises an individual card.
@@ -117,6 +124,7 @@ def sanitise_card(card: Dict) -> Dict:
 
     return info
 
+
 def is_invalid(card: Dict) -> bool:
     """Checks the card for unwanted fields.
 
@@ -137,8 +145,9 @@ def is_invalid(card: Dict) -> bool:
 
     if "flavor_text" not in card:
         return True
-    
+
     return False
+
 
 def download_artwork(card: Dict) -> str:
     """Downloads the artwork crop from Scryfall and saves to disk.
@@ -162,5 +171,5 @@ def download_artwork(card: Dict) -> str:
 
     with open(img_path, "wb") as fd:
         fd.write(r.content)
-    
+
     return img_path
