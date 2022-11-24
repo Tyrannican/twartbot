@@ -140,6 +140,7 @@ def is_invalid(card: Dict) -> bool:
     if (
         "Unglued" in set_name or "Unhinged" in set_name
         or "Unstable" in set_name or "Unsanctioned" in set_name
+        or "Unfinity" in set_name
     ):
         return True
 
