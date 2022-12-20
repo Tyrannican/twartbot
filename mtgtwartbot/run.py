@@ -12,7 +12,8 @@ if __name__ == "__main__":
     card = random.choice(cards)
 
     # Builds the text and makes the tweet
-    text = f"{card['name']} ({card['set_name']}):\n\n{card['flavour']}\n\n#MTG #MagicTheGathering #MTGA #MTGArena"
+    artist = f'\n\nArtist: {card["artist"]}' if card["artist"] else ''
+    text = f"{card['name']} ({card['set_name']}):\n\n{card['flavour']}{artist}\n\n#MTG #MagicTheGathering #MTGA #MTGArena"
 
     # Checks the length of the tweet to make sure it's short enough
     while len(text) > 280:

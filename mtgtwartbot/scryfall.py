@@ -121,6 +121,7 @@ def sanitise_card(card: Dict) -> Dict:
     info["keywords"] = card["keywords"]
     info["rarity"] = card["rarity"]
     info["flavour"] = card["flavor_text"]
+    info["artist"] = card["artist"] if card.get("artist") else ""
 
     return info
 
