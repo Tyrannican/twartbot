@@ -18,7 +18,7 @@ if __name__ == "__main__":
     # Checks the length of the tweet to make sure it's short enough
     while len(text) > 280:
         card = random.choice(cards)
-        text = f"{card['name']} ({card['set_name']}):\n\n{card['flavour']}\n\n#MTG #MagicTheGathering"
+        text = f"{card['name']} ({card['set_name']}):\n\n{card['flavour']}{artist}\n\n#MTG #MagicTheGathering"
 
     img_path = download_artwork(card)
 
